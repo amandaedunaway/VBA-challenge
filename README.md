@@ -12,6 +12,8 @@ These two shortcomings highlight the importance of being detail-oriented and doi
 
 Submission comments:
 I received an error message that my file is too large to upload to Github. Zipping the file didn’t work, and I was not able to determine how to save a VBA script file as a separate entity from a macro-enabled excel workbook. To make sure I submit all relevant files, I will also share a Google Drive link on my BCS submission, and I can figure out how to submit appropriately sized files for my next challenge assignment in python.
+Here is the Google Drive link to the excel file:
+https://drive.google.com/drive/folders/1SIE6wpzSiBfYaAg4y10h-vIhrO95Zzjz?usp=drive_link
 
 
 Sources:
