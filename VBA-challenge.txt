@@ -1,141 +1,136 @@
-'Attribute VB_Name = "Module1"
-
-' Place cursor at beginning of Sub DoSomething to
-' Run StockInfo sub routine on every sheet:
-Sub Dosomething()
-    Dim xSh As Worksheet
-    Application.ScreenUpdating = False
-    For Each xSh In Worksheets
-        xSh.Select
-        Call StockInfo
-    Next
-    Application.ScreenUpdating = True
-End Sub
-
-
 
 ' Subroutine to pull designated numbers and perform calculations:
-Sub StockInfo():
+    Sub StockInfo():
+    
+    'Loop through each sheet
+    For Each ws In Worksheets
+
+        Dim i As Long
+        Dim LastRow As Long
+        Dim OpenP As Double
+        Dim CloseP As Double
+        Dim TotalVolume As Double
+        Dim CurrentTicker As String
+        Dim PercentChange As Double
+        Dim YearlyChange As Double
+        Dim DisplayRow As Integer
+        Dim LastK As Integer
 
 
-Dim i As Long
-Dim LastRow As Long
-Dim OpenP As Double
-Dim CloseP As Double
-Dim TotalVolume As Double
-Dim CurrentTicker As String
-Dim PercentChange As Double
-Dim YearlyChange As Double
-Dim DisplayRow As Integer
-Dim LastK As Integer
-
-
-    ' Column labels for first set of calculations:
-    Range("I1") = "Ticker"
-    Range("J1") = "Yearly Change"
-    Range("K1") = "Percent Change"
-    Range("L1") = "Total Stock Volume"
+        ' Column labels for first set of calculations:
+        ws.Range("I1") = "Ticker"
+        ws.Range("J1") = "Yearly Change"
+        ws.Range("K1") = "Percent Change"
+        ws.Range("L1") = "Total Stock Volume"
     
     
-    ' Initial values and defining variables:
-    LastRow = Cells(Rows.Count, 1).End(xlUp).Row
-    OpenP = Cells(2, "C").Value
-    TotalVolume = 0
-    DisplayRow = 2
+        ' Initial values and defining variables:
+        LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        OpenP = ws.Cells(2, "C").Value
+        TotalVolume = 0
+        DisplayRow = 2
     
    
     
   
-        ' For loop to find opening and closing prices for each ticker:
-       For i = 2 To LastRow
+            ' For loop to find opening and closing prices for each ticker:
+            For i = 2 To LastRow
        
        
-        ' Cumulative Total volume for each ticker:
-        TotalVolume = TotalVolume + Cells(i, "G").Value
+                ' Cumulative Total volume for each ticker:
+                TotalVolume = TotalVolume + ws.Cells(i, "G").Value
         
         
-            ' nested if function indicates when one ticker ends
-            '   and the next begins:
-            ' When we reach the end of a ticker, we assign the
-            ' appropriate values and perform calculations:
-           If Cells(i, "A").Value <> Cells(i + 1, "A").Value Then
-                CurrentTicker = Cells(i, "A").Value
-                CloseP = Cells(i, "F").Value
-                YearlyChange = CloseP - OpenP
-                PercentChange = ((CloseP - OpenP) / OpenP) * 100
+                    ' nested if function indicates when one ticker ends
+                    '   and the next begins:
+                    ' When we reach the end of a ticker, we assign the
+                    ' appropriate values and perform calculations:
+                    If ws.Cells(i, "A").Value <> ws.Cells(i + 1, "A").Value Then
+                        CurrentTicker = ws.Cells(i, "A").Value
+                        CloseP = ws.Cells(i, "F").Value
+                        YearlyChange = CloseP - OpenP
+                        PercentChange = (CloseP - OpenP) / OpenP
                 
                 
-                'Display the values we just allocated into the appropriate cells:
-                Cells(DisplayRow, "I").Value = CurrentTicker
-                Cells(DisplayRow, "J").Value = YearlyChange
-                Cells(DisplayRow, "K").Value = PercentChange
-                Cells(DisplayRow, "L").Value = TotalVolume
+                        'Display the values we just allocated into the appropriate cells:
+                        ws.Cells(DisplayRow, "I").Value = CurrentTicker
+                        ws.Cells(DisplayRow, "J").Value = YearlyChange
+                        ws.Cells(DisplayRow, "K").Value = PercentChange
+                        ws.Cells(DisplayRow, "K").NumberFormat = "0.00%"
+                        ws.Cells(DisplayRow, "L").Value = TotalVolume
                 
                 
-                ' set up for next ticker:
-                DisplayRow = DisplayRow + 1
-                OpenP = Cells(i + 1, "C").Value
-                TotalVolume = 0
+                        ' set up for next ticker:
+                        DisplayRow = DisplayRow + 1
+                        OpenP = ws.Cells(i + 1, "C").Value
+                        TotalVolume = 0
                 
-           End If
+                    End If
         
-        Next i
+            Next i
         
         
-  'Row lables for second set of calculations:
-    Range("O2") = "Greatest % Increase"
-    Range("O3") = "Greatest % Decrease"
-    Range("O4") = "Greatest Total Volume"
-    Range("P1") = "Ticker"
-    Range("Q1") = "Value"
+    'Row lables for second set of calculations:
+    ws.Range("O2") = "Greatest % Increase"
+    ws.Range("O3") = "Greatest % Decrease"
+    ws.Range("O4") = "Greatest Total Volume"
+    ws.Range("P1") = "Ticker"
+    ws.Range("Q1") = "Value"
     
   'Search to find the greatest percent increases and decreases:
-    Range("Q2") = WorksheetFunction.Max(Range("K2:K" & LastRow))
-    Range("Q3") = WorksheetFunction.Min(Range("K2:K" & LastRow))
-    Range("Q4") = WorksheetFunction.Max(Range("L2:L" & LastRow))
+    ws.Range("Q2") = WorksheetFunction.Max(ws.Range("K2:K" & LastRow))
+    ws.Range("Q3") = WorksheetFunction.Min(ws.Range("K2:K" & LastRow))
+    ws.Range("Q4") = WorksheetFunction.Max(ws.Range("L2:L" & LastRow))
     
-    '3001
+    
+    
     
    ' For loop that matches the min and max values found above to the ticker:
         For i = 2 To LastRow
         
-            If Cells(i, "K").Value = Range("Q2") Then
-                Range("P2") = Cells(i, "I").Value
+            If ws.Cells(i, "K").Value = ws.Range("Q2") Then
+                ws.Range("P2") = ws.Cells(i, "I").Value
                 Else
             End If
             
             
-            If Cells(i, "K").Value = Range("Q3") Then
-                Range("P3") = Cells(i, "I").Value
+            If ws.Cells(i, "K").Value = ws.Range("Q3") Then
+                ws.Range("P3") = ws.Cells(i, "I").Value
                 Else
             End If
             
             
-            If Cells(i, "L").Value = Range("Q4") Then
-                Range("P4") = Cells(i, "I").Value
+            If ws.Cells(i, "L").Value = ws.Range("Q4") Then
+                ws.Range("P4") = ws.Cells(i, "I").Value
                 Else
             End If
             
         Next i
         
+   
+   'Format the second table:
+    ws.Range("Q2").NumberFormat = "0.00%"
+    ws.Range("Q3").NumberFormat = "0.00%"
+
             
    'Color formatting:
     For i = 2 To LastRow
     
-        If Cells(i, "J").Value < 0 Then
-            Cells(i, "J").Interior.ColorIndex = 3
+        If ws.Cells(i, "J").Value < 0 Then
+            ws.Cells(i, "J").Interior.ColorIndex = 3
             Else
         End If
         
         
-        If Cells(i, "J").Value > 0 Then
-            Cells(i, "J").Interior.ColorIndex = 4
+        If ws.Cells(i, "J").Value > 0 Then
+            ws.Cells(i, "J").Interior.ColorIndex = 4
             Else
         End If
         
     Next i
     
-  
+    
+  Next ws
     
       
 End Sub
